@@ -1,0 +1,16 @@
+// 统一的项目配置文件
+project.ext {
+    // 构建版本
+    minSdkVersion = 23
+    compileSdkVersion = 31
+    targetSdkVersion = 31
+    versionCode = 1001
+    versionName = "1.0.01"
+
+    // Android官方依赖库
+    appcompat = '1.2.0'
+
+
+    // 第三方依赖库
+
+}
