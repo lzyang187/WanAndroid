@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="lib_http_network_error" type="string">请检查网络连接</item>
+    <item name="lib_http_network_timeout" type="string">网络请求超时</item>
+    <item name="lib_http_server_error" type="string">服务器异常</item>
+    <item name="lib_http_result_empty" type="string">服务器返回结果为空</item>
+    <item name="lib_http_click_retry" type="string">点击重试</item>
+</resources>

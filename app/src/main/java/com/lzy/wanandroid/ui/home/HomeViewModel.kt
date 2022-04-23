@@ -1,13 +1,77 @@
 package com.lzy.wanandroid.ui.home
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.lzy.corebiz.BaseRequestViewModel
+import com.lzy.corebiz.httpservice.WanAndroidHttpService
+import com.lzy.corebiz.httpservice.bean.ArticleBean
+import com.lzy.libhttp.RetrofitBuildHelper
+import com.lzy.libhttp.exception.HttpRequestError
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.launch
 
-class HomeViewModel : ViewModel() {
+class HomeViewModel : BaseRequestViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
+    private var mArticleListLiveData = MutableLiveData<List<ArticleBean>>()
+    private val mArticleList = mutableListOf<ArticleBean>()
+
+    fun getArticleListLiveData() = mArticleListLiveData
+
+    private var mPageIndex: Int = 0
+
+    fun isRefresh() = mPageIndex == 0
+
+    fun refresh() {
+        mArticleList.clear()
+        requestTopArticleList()
+        mPageIndex = 0
+        requestArticleList()
     }
-    val text: LiveData<String> = _text
+
+    fun loadMore() {
+        requestArticleList()
+    }
+
+    private fun requestArticleList() {
+        val httpService = RetrofitBuildHelper.create(WanAndroidHttpService::class.java)
+        launchLiveDataHandlerRequest {
+            val result = httpService.articleList(mPageIndex)
+            if (result.success()) {
+                result.data?.datas?.let {
+                    if (it.isEmpty()) {
+                        // 返回结果为空
+                        mHttpRequestErrorLiveData.value = HttpRequestError.EmptyError
+                    } else {
+                        mArticleList.addAll(it)
+                        mArticleListLiveData.value = mArticleList
+                        // 每次请求成功后页码加+1
+                        mPageIndex++
+                    }
+                } ?: run {
+                    // 返回结果为空
+                    mHttpRequestErrorLiveData.value = HttpRequestError.EmptyError
+                }
+            } else {
+                mHttpRequestErrorLiveData.value = HttpRequestError.NetworkError
+            }
+        }
+    }
+
+    private fun requestTopArticleList() {
+        val httpService = RetrofitBuildHelper.create(WanAndroidHttpService::class.java)
+        viewModelScope.launch(CoroutineExceptionHandler { _, _ ->
+            // 置顶文章请求失败则不处理
+        }) {
+            val result = httpService.topArticleList()
+            if (result.success()) {
+                result.data?.let {
+                    it.forEach { bean: ArticleBean ->
+                        bean.top = true
+                    }
+                    mArticleList.addAll(0, it)
+                    mArticleListLiveData.value = mArticleList
+                }
+            }
+        }
+    }
 }

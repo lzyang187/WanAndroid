@@ -8,8 +8,6 @@ project.ext {
     versionName = "1.0.01"
 
     // Android官方依赖库
-    appcompat = '1.2.0'
-
 
     // 第三方依赖库
 

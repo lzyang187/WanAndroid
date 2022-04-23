@@ -16,7 +16,14 @@ object AppConfig {
     lateinit var PACKAGE_NAME: String
 
 
-    fun init(application: Application, debug: Boolean, versionCode: Int, versionName: String, appName: String, packageName: String) {
+    fun init(
+        application: Application,
+        debug: Boolean,
+        versionCode: Int,
+        versionName: String,
+        appName: String,
+        packageName: String
+    ) {
         APPLICATION = application
         DEBUG = debug
         VERSION_CODE = versionCode

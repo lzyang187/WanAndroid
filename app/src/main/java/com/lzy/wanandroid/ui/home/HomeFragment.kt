@@ -1,42 +1,125 @@
 package com.lzy.wanandroid.ui.home
 
-import android.os.Bundle
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.lzy.libhttp.exception.HttpRequestError
+import com.lzy.libview.BaseFragment
 import com.lzy.wanandroid.R
 import com.lzy.wanandroid.databinding.FragmentHomeBinding
 
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment<FragmentHomeBinding>() {
 
-    private lateinit var homeViewModel: HomeViewModel
-    private var _binding: FragmentHomeBinding? = null
+    private lateinit var mViewModel: HomeViewModel
+    private lateinit var mAdapter: HomeAdapter
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    override fun initViewBinding(
+        inflater: LayoutInflater, container: ViewGroup?
+    ): FragmentHomeBinding {
+        return FragmentHomeBinding.inflate(inflater, container, false)
+    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+    override fun initView() {
+        mBinding.pullLayout.setOnRefreshListener { onRefreshData() }
+        mBinding.pullLayout.setOnLoadMoreListener { onLoadMore() }
+        mBinding.recyclerView.layoutManager = LinearLayoutManager(context)
+        mBinding.recyclerView.addItemDecoration(
+            DividerItemDecoration(
+                context, DividerItemDecoration.VERTICAL
+            )
+        )
+    }
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+    private fun onRefreshData() {
+        mViewModel.refresh()
+    }
 
-        val textView: TextView = binding.textHome
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
+    private fun onLoadMore() {
+        mViewModel.loadMore()
+    }
+
+    override fun initViewModel() {
+        mViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        mViewModel.getHttpRequestErrorLiveData().observe(this, { error ->
+            if (mViewModel.isRefresh()) {
+                mBinding.pullLayout.finishRefresh()
+            } else {
+                mBinding.pullLayout.finishLoadMore()
+            }
+            when (error) {
+                is HttpRequestError.NetworkError -> {
+                    if (mViewModel.isRefresh()) {
+                        showEmptyView(getString(R.string.lib_http_network_error))
+                    } else {
+                        toast(R.string.lib_http_network_error)
+                    }
+                }
+                is HttpRequestError.TimeoutError -> {
+                    if (mViewModel.isRefresh()) {
+                        showEmptyView(getString(R.string.lib_http_network_timeout))
+                    } else {
+                        toast(R.string.lib_http_network_timeout)
+                    }
+                }
+                is HttpRequestError.ServerError -> {
+                    if (mViewModel.isRefresh()) {
+                        showEmptyView(getString(R.string.lib_http_server_error))
+                    } else {
+                        toast(R.string.lib_http_server_error)
+                    }
+                }
+                is HttpRequestError.EmptyError -> {
+                    if (mViewModel.isRefresh()) {
+                        showEmptyView(getString(R.string.lib_http_result_empty))
+                    } else {
+                        toast(R.string.lib_http_result_empty)
+                    }
+                }
+            }
         })
-        return root
+        mViewModel.getArticleListLiveData().observe(this, {
+            context?.let { con: Context ->
+                if (mViewModel.isRefresh()) {
+                    hideEmptyView()
+                    mBinding.pullLayout.finishRefresh()
+                } else {
+                    mBinding.pullLayout.finishLoadMore()
+                }
+                if (::mAdapter.isInitialized) {
+                    mAdapter.notifyDataSetChanged()
+                } else {
+                    mAdapter = HomeAdapter(con, it)
+                    mBinding.recyclerView.adapter = mAdapter
+                }
+            }
+        })
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    private fun showEmptyView(tip: String) {
+        mBinding.pullLayout.setEnableRefresh(false)
+        mBinding.pullLayout.setEnableLoadMore(false)
+        mBinding.recyclerView.visibility = View.GONE
+//        mBinding.emptyView.show(
+//            false, tip, null, getString(R.string.lib_http_click_retry)
+//        ) {
+//            requestOrLoadData()
+//        }
     }
+
+    private fun hideEmptyView() {
+        mBinding.pullLayout.setEnableRefresh(true)
+        mBinding.pullLayout.setEnableLoadMore(true)
+//        mBinding.emptyView.hide()
+        mBinding.recyclerView.visibility = View.VISIBLE
+    }
+
+    override fun requestOrLoadData() {
+        hideEmptyView()
+        mBinding.pullLayout.autoRefresh()
+    }
+
 }
