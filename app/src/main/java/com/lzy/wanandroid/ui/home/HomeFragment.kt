@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -45,49 +46,50 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     override fun initViewModel() {
         mViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
         mViewModel.getHttpRequestErrorLiveData().observe(this, { error ->
-            if (mViewModel.isRefresh()) {
-                mBinding.pullLayout.finishRefresh()
-            } else {
-                mBinding.pullLayout.finishLoadMore()
-            }
             when (error) {
                 is HttpRequestError.NetworkError -> {
                     if (mViewModel.isRefresh()) {
                         showEmptyView(getString(R.string.lib_http_network_error))
                     } else {
-                        toast(R.string.lib_http_network_error)
+                        loadMoreError(R.string.lib_http_network_error)
                     }
                 }
                 is HttpRequestError.TimeoutError -> {
                     if (mViewModel.isRefresh()) {
                         showEmptyView(getString(R.string.lib_http_network_timeout))
                     } else {
-                        toast(R.string.lib_http_network_timeout)
+                        loadMoreError(R.string.lib_http_network_timeout)
                     }
                 }
                 is HttpRequestError.ServerError -> {
                     if (mViewModel.isRefresh()) {
                         showEmptyView(getString(R.string.lib_http_server_error))
                     } else {
-                        toast(R.string.lib_http_server_error)
+                        loadMoreError(R.string.lib_http_server_error)
                     }
                 }
                 is HttpRequestError.EmptyError -> {
                     if (mViewModel.isRefresh()) {
                         showEmptyView(getString(R.string.lib_http_result_empty))
                     } else {
-                        toast(R.string.lib_http_result_empty)
+                        loadMoreError(R.string.lib_http_result_empty)
                     }
                 }
             }
         })
         mViewModel.getArticleListLiveData().observe(this, {
             context?.let { con: Context ->
-                if (mViewModel.isRefresh()) {
-                    hideEmptyView()
-                    mBinding.pullLayout.finishRefresh()
-                } else {
-                    mBinding.pullLayout.finishLoadMore()
+                when {
+                    mViewModel.isRefresh() -> {
+                        hideEmptyView()
+                        mBinding.pullLayout.finishRefresh()
+                    }
+                    mViewModel.isNoMore() -> {
+                        mBinding.pullLayout.finishLoadMoreWithNoMoreData()
+                    }
+                    else -> {
+                        mBinding.pullLayout.finishLoadMore()
+                    }
                 }
                 if (::mAdapter.isInitialized) {
                     mAdapter.notifyDataSetChanged()
@@ -100,26 +102,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     private fun showEmptyView(tip: String) {
+        mBinding.pullLayout.finishRefresh()
         mBinding.pullLayout.setEnableRefresh(false)
         mBinding.pullLayout.setEnableLoadMore(false)
         mBinding.recyclerView.visibility = View.GONE
-//        mBinding.emptyView.show(
-//            false, tip, null, getString(R.string.lib_http_click_retry)
-//        ) {
-//            requestOrLoadData()
-//        }
+        mBinding.emptyView.show(tip) {
+            requestOrLoadData()
+        }
     }
 
     private fun hideEmptyView() {
         mBinding.pullLayout.setEnableRefresh(true)
         mBinding.pullLayout.setEnableLoadMore(true)
-//        mBinding.emptyView.hide()
+        mBinding.emptyView.hide()
         mBinding.recyclerView.visibility = View.VISIBLE
+    }
+
+    private fun loadMoreError(@StringRes resId: Int) {
+        toast(resId)
+        mBinding.pullLayout.finishLoadMore(false)
     }
 
     override fun requestOrLoadData() {
         hideEmptyView()
-        mBinding.pullLayout.autoRefresh()
+        mBinding.pullLayout.autoRefreshAnimationOnly()
+        mViewModel.refresh()
     }
 
 }

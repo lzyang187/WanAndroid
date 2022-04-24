@@ -1,35 +1,43 @@
 package com.lzy.wanandroid
 
-import android.os.Bundle
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.viewpager2.widget.ViewPager2
+import com.lzy.libview.BaseActivity
+import com.lzy.libview.ViewPager2FragmentStateAdapter
 import com.lzy.wanandroid.databinding.ActivityMainBinding
+import com.lzy.wanandroid.ui.dashboard.DashboardFragment
+import com.lzy.wanandroid.ui.home.HomeFragment
+import com.lzy.wanandroid.ui.notifications.NotificationsFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding>() {
 
-    private lateinit var binding: ActivityMainBinding
+    private val mHomeFragment = HomeFragment()
+    private val mDashboardFragment = DashboardFragment()
+    private val mNotificationsFragment = NotificationsFragment()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun initViewBinding(): ActivityMainBinding {
+        return ActivityMainBinding.inflate(layoutInflater)
+    }
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        val navView: BottomNavigationView = binding.navView
-
-        val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
-            )
+    override fun initView() {
+        super.initView()
+        mBinding.viewPager.isUserInputEnabled = false
+        mBinding.viewPager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        mBinding.viewPager.adapter = ViewPager2FragmentStateAdapter(
+            this, listOf(mHomeFragment, mDashboardFragment, mNotificationsFragment)
         )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        mBinding.navView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    mBinding.viewPager.currentItem = 0
+                }
+                R.id.navigation_dashboard -> {
+                    mBinding.viewPager.currentItem = 1
+                }
+                R.id.navigation_notifications -> {
+                    mBinding.viewPager.currentItem = 2
+                }
+            }
+            true
+        }
     }
 }

@@ -21,7 +21,12 @@ class HomeViewModel : BaseRequestViewModel() {
 
     fun isRefresh() = mPageIndex == 0
 
+    private var mNoMore = false
+
+    fun isNoMore() = mNoMore
+
     fun refresh() {
+        mNoMore = false
         mArticleList.clear()
         requestTopArticleList()
         mPageIndex = 0
@@ -37,6 +42,7 @@ class HomeViewModel : BaseRequestViewModel() {
         launchLiveDataHandlerRequest {
             val result = httpService.articleList(mPageIndex)
             if (result.success()) {
+                mNoMore = result.data?.over == true
                 result.data?.datas?.let {
                     if (it.isEmpty()) {
                         // 返回结果为空
