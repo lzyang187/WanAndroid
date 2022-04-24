@@ -2,7 +2,9 @@ package com.lzy.wanandroid.ui.home
 
 import android.text.Html
 import android.view.View
+import com.bumptech.glide.Glide
 import com.lzy.corebiz.httpservice.bean.ArticleBean
+import com.lzy.libbasefunction.glide.GlideHelper
 import com.lzy.libview.BaseViewHolder
 import com.lzy.wanandroid.databinding.ItemHomeArticleLayoutBinding
 
@@ -29,6 +31,9 @@ class HomeViewHolder(binding: ItemHomeArticleLayoutBinding) :
                 mBinding.ivImg.visibility = View.GONE
             } else {
                 mBinding.ivImg.visibility = View.VISIBLE
+                GlideHelper.load(
+                    Glide.with(itemView.context), envelopePic, mBinding.ivImg
+                )
             }
             mBinding.tvTitle.text = Html.fromHtml(title)
             val chapter = getChapter()
