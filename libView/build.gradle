@@ -39,4 +39,5 @@ dependencies {
     api 'io.github.scwang90:refresh-header-material:2.0.5'
     // 经典加载更多
     api 'io.github.scwang90:refresh-footer-classics:2.0.5'
+    implementation 'androidx.webkit:webkit:1.4.0'
 }

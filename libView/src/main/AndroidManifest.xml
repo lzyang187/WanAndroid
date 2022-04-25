@@ -1,2 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.lzy.libview"/>
+    package="com.lzy.libview">
+
+    <application>
+        <activity android:name=".webview.WebViewActivity" />
+    </application>
+
+</manifest>

@@ -44,7 +44,6 @@ class HomeViewHolder(binding: ItemHomeArticleLayoutBinding) :
                 mBinding.tvChapterName.text = chapter
             }
 
-
         }
     }
 }

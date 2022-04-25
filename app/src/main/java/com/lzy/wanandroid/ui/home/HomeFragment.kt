@@ -8,12 +8,16 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.lzy.corebiz.httpservice.bean.ArticleBean
 import com.lzy.libhttp.exception.HttpRequestError
+import com.lzy.libview.BaseAdapter
 import com.lzy.libview.BaseFragment
+import com.lzy.libview.webview.WebViewActivity
 import com.lzy.wanandroid.R
 import com.lzy.wanandroid.databinding.FragmentHomeBinding
 
-class HomeFragment : BaseFragment<FragmentHomeBinding>() {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(),
+    BaseAdapter.OnItemClickListener<ArticleBean> {
 
     private lateinit var mViewModel: HomeViewModel
     private lateinit var mAdapter: HomeAdapter
@@ -94,7 +98,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
                 if (::mAdapter.isInitialized) {
                     mAdapter.notifyDataSetChanged()
                 } else {
-                    mAdapter = HomeAdapter(con, it)
+                    mAdapter = HomeAdapter(con, it, this)
                     mBinding.recyclerView.adapter = mAdapter
                 }
             }
@@ -128,5 +132,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
         mBinding.pullLayout.autoRefreshAnimationOnly()
         mViewModel.refresh()
     }
+
+    override fun onItemClick(position: Int, data: ArticleBean?) {
+        data?.link?.let { link: String ->
+            activity?.let { activity -> WebViewActivity.openWebViewActivity(activity, link) }
+        }
+    }
+
 
 }
