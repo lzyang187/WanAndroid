@@ -42,6 +42,7 @@ class WebViewActivity : BaseActivity<LibViewActivityWebViewBinding>(),
 
     override fun initView() {
         super.initView()
+        initToolbar(mBinding.toolbar)
         buildWebView()
         mUrl?.let {
             mWebView.loadUrl(it)
@@ -91,7 +92,7 @@ class WebViewActivity : BaseActivity<LibViewActivityWebViewBinding>(),
     }
 
     private fun refreshTitle(title: String?) {
-
+        mBinding.toolbar.title = title
     }
 
     override fun onJsAlert(
@@ -110,6 +111,10 @@ class WebViewActivity : BaseActivity<LibViewActivityWebViewBinding>(),
 
     private fun changeProgress(progress: Int) {
         mBinding.webViewPb.progress = progress
+    }
+
+    override fun onBackPressed() {
+        handleGoBack()
     }
 
     private fun handleGoBack() {
