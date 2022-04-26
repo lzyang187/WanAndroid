@@ -9,9 +9,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lzy.corebiz.httpservice.bean.ArticleBean
+import com.lzy.corebiz.httpservice.bean.BannerBean
 import com.lzy.libhttp.exception.HttpRequestError
 import com.lzy.libview.BaseAdapter
 import com.lzy.libview.BaseFragment
+import com.lzy.libview.banner.IBannerData
 import com.lzy.libview.webview.WebViewActivity
 import com.lzy.wanandroid.R
 import com.lzy.wanandroid.databinding.FragmentHomeBinding
@@ -48,7 +50,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
     }
 
     override fun initViewModel() {
-        mViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        mViewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
         mViewModel.getHttpRequestErrorLiveData().observe(this, { error ->
             when (error) {
                 is HttpRequestError.NetworkError -> {
@@ -99,10 +101,31 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
                     mAdapter.notifyDataSetChanged()
                 } else {
                     mAdapter = HomeAdapter(con, it, this)
+                    if (mViewModel.getBannerLiveData().value?.isNotEmpty() == true) {
+                        mAdapter.setBannerList(
+                            mViewModel.getBannerLiveData().value as List<BannerBean>,
+                            mBannerItemClickListener
+                        )
+                    }
                     mBinding.recyclerView.adapter = mAdapter
                 }
             }
         })
+        mViewModel.getBannerLiveData().observe(this, {
+            context?.let { con: Context ->
+                if (::mAdapter.isInitialized) {
+                    mAdapter.setBannerList(it, mBannerItemClickListener)
+                }
+            }
+        })
+    }
+
+    private val mBannerItemClickListener = object : BaseAdapter.OnItemClickListener<IBannerData> {
+        override fun onItemClick(position: Int, data: IBannerData?) {
+            (data as BannerBean?)?.url?.let {
+                activity?.let { activity -> WebViewActivity.openWebViewActivity(activity, it) }
+            }
+        }
     }
 
     private fun showEmptyView(tip: String) {

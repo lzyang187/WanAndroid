@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.lzy.corebiz.BaseRequestViewModel
 import com.lzy.corebiz.httpservice.WanAndroidHttpService
 import com.lzy.corebiz.httpservice.bean.ArticleBean
+import com.lzy.corebiz.httpservice.bean.BannerBean
 import com.lzy.libhttp.RetrofitBuildHelper
 import com.lzy.libhttp.exception.HttpRequestError
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -28,9 +29,11 @@ class HomeViewModel : BaseRequestViewModel() {
     fun refresh() {
         mNoMore = false
         mArticleList.clear()
+        mBannerList.clear()
         requestTopArticleList()
         mPageIndex = 0
         requestArticleList()
+        requestBanner()
     }
 
     fun loadMore() {
@@ -76,6 +79,26 @@ class HomeViewModel : BaseRequestViewModel() {
                     }
                     mArticleList.addAll(0, it)
                     mArticleListLiveData.value = mArticleList
+                }
+            }
+        }
+    }
+
+    private val mBannerLiveData = MutableLiveData<List<BannerBean>>()
+    private val mBannerList = mutableListOf<BannerBean>()
+
+    fun getBannerLiveData() = mBannerLiveData
+
+    private fun requestBanner() {
+        val httpService = RetrofitBuildHelper.create(WanAndroidHttpService::class.java)
+        viewModelScope.launch(CoroutineExceptionHandler { _, _ ->
+            // banner请求失败则不处理
+        }) {
+            val result = httpService.banner()
+            if (result.success()) {
+                result.data?.let {
+                    mBannerList.addAll(it)
+                    mBannerLiveData.value = mBannerList
                 }
             }
         }

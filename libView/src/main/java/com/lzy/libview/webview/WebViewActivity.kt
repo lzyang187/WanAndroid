@@ -42,7 +42,7 @@ class WebViewActivity : BaseActivity<LibViewActivityWebViewBinding>(),
 
     override fun initView() {
         super.initView()
-        initToolbar(mBinding.toolbar)
+        initToolbar(mBinding.toolbarLayout.toolbar)
         buildWebView()
         mUrl?.let {
             mWebView.loadUrl(it)
@@ -92,7 +92,7 @@ class WebViewActivity : BaseActivity<LibViewActivityWebViewBinding>(),
     }
 
     private fun refreshTitle(title: String?) {
-        mBinding.toolbar.title = title
+        mBinding.toolbarLayout.toolbar.title = title
     }
 
     override fun onJsAlert(

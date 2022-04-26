@@ -37,6 +37,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), IBaseView {
         setSupportActionBar(toolbar)
         toolbar.setNavigationIcon(R.drawable.lib_view_arrow_back_24)
         toolbar.setNavigationOnClickListener { onBackPressed() }
+        toolbar.setTitleTextAppearance(this, R.style.lib_view_toolbar_title)
     }
 
     protected open fun requestOrLoadData() {

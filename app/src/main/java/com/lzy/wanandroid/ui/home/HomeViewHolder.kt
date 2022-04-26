@@ -32,7 +32,7 @@ class HomeViewHolder(binding: ItemHomeArticleLayoutBinding) :
             } else {
                 mBinding.ivImg.visibility = View.VISIBLE
                 GlideHelper.load(
-                    Glide.with(itemView.context), envelopePic, mBinding.ivImg
+                    Glide.with(itemView), envelopePic, mBinding.ivImg
                 )
             }
             mBinding.tvTitle.text = Html.fromHtml(title)
