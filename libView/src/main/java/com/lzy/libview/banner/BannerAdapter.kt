@@ -33,6 +33,9 @@ class BannerAdapter(
     }
 
     override fun getItemCount(): Int {
+        if (mDataList.isEmpty()) {
+            return 0
+        }
         return Int.MAX_VALUE
     }
 

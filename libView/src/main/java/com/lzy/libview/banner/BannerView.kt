@@ -53,10 +53,9 @@ class BannerView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
                 super.onPageScrollStateChanged(state)
                 LogUtils.iTag(TAG, "onPageScrollStateChanged = $state")
                 if (state == ViewPager2.SCROLL_STATE_DRAGGING) {
-                    mHandler.removeMessages(INTERVAL_MESSAGE)
+                    stopInterval()
                 } else if (state == ViewPager2.SCROLL_STATE_IDLE) {
-                    mHandler.removeMessages(INTERVAL_MESSAGE)
-                    mHandler.sendEmptyMessageDelayed(INTERVAL_MESSAGE, INTERVAL_DURATION)
+                    startInterval()
                 }
             }
         })
@@ -76,9 +75,29 @@ class BannerView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
                 mViewPager2.adapter = mAdapter
             }
             mViewPager2.setCurrentItem(Int.MAX_VALUE / 2, false)
-            // 开始轮播
-            mHandler.removeMessages(INTERVAL_MESSAGE)
-            mHandler.sendEmptyMessageDelayed(INTERVAL_MESSAGE, INTERVAL_DURATION)
+            startInterval()
+        }
+    }
+
+    /**
+     * 开始轮播
+     */
+    private fun startInterval() {
+        mHandler.removeMessages(INTERVAL_MESSAGE)
+        mHandler.sendEmptyMessageDelayed(INTERVAL_MESSAGE, INTERVAL_DURATION)
+    }
+
+    private fun stopInterval() {
+        mHandler.removeMessages(INTERVAL_MESSAGE)
+    }
+
+    override fun onWindowVisibilityChanged(visibility: Int) {
+        LogUtils.iTag(TAG, "onWindowVisibilityChanged：$visibility")
+        super.onWindowVisibilityChanged(visibility)
+        if (visibility == VISIBLE) {
+            startInterval()
+        } else {
+            stopInterval()
         }
     }
 
