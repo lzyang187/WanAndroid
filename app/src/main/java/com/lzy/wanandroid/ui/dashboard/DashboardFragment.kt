@@ -3,14 +3,17 @@ package com.lzy.wanandroid.ui.dashboard
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.lzy.libview.BaseFragment
 import com.lzy.wanandroid.databinding.FragmentDashboardBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class DashboardFragment : BaseFragment<FragmentDashboardBinding>() {
+@AndroidEntryPoint
+class DashboardFragment @Inject constructor() : BaseFragment<FragmentDashboardBinding>() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private val dashboardViewModel: DashboardViewModel by viewModels()
 
     override fun initViewBinding(
         inflater: LayoutInflater, container: ViewGroup?
@@ -19,7 +22,6 @@ class DashboardFragment : BaseFragment<FragmentDashboardBinding>() {
     }
 
     override fun initView() {
-        dashboardViewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
         val textView: TextView = mBinding.textDashboard
         dashboardViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it

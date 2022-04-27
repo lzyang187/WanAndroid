@@ -7,12 +7,20 @@ import com.lzy.wanandroid.databinding.ActivityMainBinding
 import com.lzy.wanandroid.ui.dashboard.DashboardFragment
 import com.lzy.wanandroid.ui.home.HomeFragment
 import com.lzy.wanandroid.ui.notifications.NotificationsFragment
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding>() {
 
-    private val mHomeFragment = HomeFragment()
-    private val mDashboardFragment = DashboardFragment()
-    private val mNotificationsFragment = NotificationsFragment()
+    @Inject
+    lateinit var mHomeFragment: HomeFragment
+
+    @Inject
+    lateinit var mDashboardFragment: DashboardFragment
+
+    @Inject
+    lateinit var mNotificationsFragment: NotificationsFragment
 
     override fun initViewBinding(): ActivityMainBinding {
         return ActivityMainBinding.inflate(layoutInflater)

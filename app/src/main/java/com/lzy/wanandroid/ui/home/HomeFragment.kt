@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lzy.corebiz.httpservice.bean.ArticleBean
@@ -17,11 +17,14 @@ import com.lzy.libview.banner.IBannerData
 import com.lzy.libview.webview.WebViewActivity
 import com.lzy.wanandroid.R
 import com.lzy.wanandroid.databinding.FragmentHomeBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class HomeFragment : BaseFragment<FragmentHomeBinding>(),
+@AndroidEntryPoint
+class HomeFragment @Inject constructor() : BaseFragment<FragmentHomeBinding>(),
     BaseAdapter.OnItemClickListener<ArticleBean> {
 
-    private lateinit var mViewModel: HomeViewModel
+    private val mViewModel: HomeViewModel by viewModels()
     private lateinit var mAdapter: HomeAdapter
 
     override fun initViewBinding(
@@ -50,7 +53,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(),
     }
 
     override fun initViewModel() {
-        mViewModel = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
         mViewModel.getHttpRequestErrorLiveData().observe(this, { error ->
             when (error) {
                 is HttpRequestError.NetworkError -> {

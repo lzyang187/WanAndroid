@@ -3,14 +3,17 @@ package com.lzy.wanandroid.ui.notifications
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.lzy.libview.BaseFragment
 import com.lzy.wanandroid.databinding.FragmentNotificationsBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-class NotificationsFragment : BaseFragment<FragmentNotificationsBinding>() {
+@AndroidEntryPoint
+class NotificationsFragment @Inject constructor() : BaseFragment<FragmentNotificationsBinding>() {
 
-    private lateinit var notificationsViewModel: NotificationsViewModel
+    private val notificationsViewModel: NotificationsViewModel by viewModels()
 
     override fun initViewBinding(
         inflater: LayoutInflater, container: ViewGroup?
@@ -19,7 +22,6 @@ class NotificationsFragment : BaseFragment<FragmentNotificationsBinding>() {
     }
 
     override fun initView() {
-        notificationsViewModel = ViewModelProvider(this).get(NotificationsViewModel::class.java)
         val textView: TextView = mBinding.textNotifications
         notificationsViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it

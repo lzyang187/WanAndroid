@@ -5,10 +5,12 @@ import com.blankj.utilcode.util.LogUtils
 import com.lzy.corebiz.AppConfig
 import com.lzy.libhttp.RetrofitBuildHelper
 import com.lzy.libview.LibViewInit
+import dagger.hilt.android.HiltAndroidApp
 
 /**
  * Created by zhaoyang.li5 on 2022/4/4 8:33
  */
+@HiltAndroidApp
 class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
