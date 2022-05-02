@@ -10,15 +10,16 @@ import com.lzy.libhttp.RetrofitBuildHelper
  * maintains an in-memory cache of login status and user credentials information.
  */
 
-class LoginRepository() {
+class LoginRepository {
 
     suspend fun login(username: String, password: String): BaseResult<UserBean> {
         val httpService = RetrofitBuildHelper.create(WanAndroidHttpService::class.java)
         return httpService.login(username, password)
     }
 
-    suspend fun logout() {
-
+    suspend fun logout(): BaseResult<Unit> {
+        val httpService = RetrofitBuildHelper.create(WanAndroidHttpService::class.java)
+        return httpService.logout()
     }
 
 

@@ -7,6 +7,10 @@
             android:name=".login.ui.login.LoginActivity"
             android:exported="true"
             android:label="@string/core_biz_title_activity_login" />
+        <activity
+            android:name=".login.register.RegisterActivity"
+            android:exported="true"
+            android:label="@string/core_biz_action_register" />
     </application>
 
 </manifest>

@@ -67,6 +67,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 R.id.my_share -> {
                     toast(R.string.my_share)
                 }
+                R.id.settings -> {
+
+                }
             }
             mBinding.drawerLayout.closeDrawers()
             return@setNavigationItemSelectedListener true

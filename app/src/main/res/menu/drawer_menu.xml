@@ -9,5 +9,11 @@
             android:id="@+id/my_share"
             android:icon="@drawable/ic_baseline_share_24"
             android:title="@string/my_share" />
+
+        <item
+            android:id="@+id/settings"
+            android:icon="@drawable/ic_baseline_settings_24"
+            android:title="@string/settings" />
+        
     </group>
 </menu>
