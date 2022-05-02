@@ -1,11 +1,19 @@
 package com.lzy.wanandroid
 
 import android.view.MenuItem
+import android.view.View
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
+import com.lzy.corebiz.httpservice.bean.UserBean
+import com.lzy.corebiz.login.UserMgr
+import com.lzy.corebiz.login.ui.login.LoginActivity
+import com.lzy.libbasefunction.glide.GlideHelper
 import com.lzy.libview.BaseActivity
 import com.lzy.libview.ViewPager2FragmentStateAdapter
 import com.lzy.wanandroid.databinding.ActivityMainBinding
+import com.lzy.wanandroid.databinding.DrawerHeaderBinding
 import com.lzy.wanandroid.ui.dashboard.DashboardFragment
 import com.lzy.wanandroid.ui.home.HomeFragment
 import com.lzy.wanandroid.ui.notifications.NotificationsFragment
@@ -63,13 +71,43 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
             mBinding.drawerLayout.closeDrawers()
             return@setNavigationItemSelectedListener true
         }
+        initDrawHeaderView()
+    }
+
+    private lateinit var mDrawerHeaderBinding: DrawerHeaderBinding
+
+    private fun initDrawHeaderView() {
+        mDrawerHeaderBinding = DrawerHeaderBinding.bind(mBinding.navigationView.getHeaderView(0))
+        val userBean = UserMgr.getUserBeanLiveData.value
+        displayLoginStatus(userBean)
+        UserMgr.getUserBeanLiveData.observe(this, Observer {
+            displayLoginStatus(it)
+        })
+    }
+
+    private fun displayLoginStatus(userBean: UserBean?) {
+        if (userBean != null) {
+            GlideHelper.load(
+                Glide.with(this),
+                userBean.icon,
+                mDrawerHeaderBinding.iconImage,
+                GlideHelper.getCircleRequestOptions(mDrawerHeaderBinding.iconImage)
+            )
+            mDrawerHeaderBinding.nameText.text = userBean.nickname
+            mDrawerHeaderBinding.emailText.visibility = View.VISIBLE
+            mDrawerHeaderBinding.emailText.text = userBean.email
+            mDrawerHeaderBinding.root.setOnClickListener(null)
+        } else {
+            mDrawerHeaderBinding.nameText.setText(R.string.core_biz_action_go_sign_in)
+            mDrawerHeaderBinding.emailText.visibility = View.GONE
+            mDrawerHeaderBinding.root.setOnClickListener {
+                LoginActivity.startLoginActivity(this)
+            }
+        }
     }
 
     private fun initToolBar() {
         setSupportActionBar(mBinding.toolbarLayout.toolbar)
-        mBinding.toolbarLayout.toolbar.setTitleTextAppearance(
-            this, com.lzy.libview.R.style.lib_view_toolbar_title
-        )
         supportActionBar?.let {
             it.setDisplayHomeAsUpEnabled(true)
             it.setHomeAsUpIndicator(R.drawable.ic_baseline_menu_24)

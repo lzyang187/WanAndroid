@@ -8,6 +8,6 @@ package com.lzy.libhttp.exception
 sealed class HttpRequestError {
     object NetworkError : HttpRequestError()
     object TimeoutError : HttpRequestError()
-    object ServerError : HttpRequestError()
+    class ServerError(val errorMsg: String? = null) : HttpRequestError()
     object EmptyError : HttpRequestError()
 }

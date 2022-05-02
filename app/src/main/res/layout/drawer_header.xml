@@ -2,30 +2,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="180dp"
-    android:background="?attr/colorPrimaryVariant"
+    android:background="@drawable/lib_view_ripple_theme_color"
+    android:gravity="center"
     android:padding="10dp">
 
     <ImageView
         android:id="@+id/iconImage"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_centerInParent="true" />
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/lib_basefunction_ic_baseline_account_circle_24" />
 
     <TextView
-        android:id="@+id/mailText"
+        android:id="@+id/nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:textColor="#FFF"
-        android:textSize="14sp"
-        tools:text="tonygreendev@gmail.com" />
+        android:layout_below="@id/iconImage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="@string/core_biz_action_go_sign_in"
+        android:textColor="@color/white"
+        android:textSize="16sp" />
 
     <TextView
-        android:id="@+id/userText"
+        android:id="@+id/emailText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/mailText"
-        android:textColor="#FFF"
+        android:layout_below="@id/nameText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:textColor="@color/white"
         android:textSize="14sp"
-        tools:text="Tony Green" />
+        android:visibility="gone"
+        tools:text="Tony Green"
+        tools:visibility="visible" />
 </RelativeLayout>

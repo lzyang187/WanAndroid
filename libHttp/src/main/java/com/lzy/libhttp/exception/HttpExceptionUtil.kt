@@ -22,7 +22,7 @@ object HttpExceptionUtil {
                 if (throwable.code() in 200 until 300) {
                     return
                 } else {
-                    errorHandler?.onError(HttpRequestError.ServerError)
+                    errorHandler?.onError(HttpRequestError.ServerError())
                 }
             }
             is SocketTimeoutException -> {
@@ -32,10 +32,10 @@ object HttpExceptionUtil {
                 errorHandler?.onError(HttpRequestError.NetworkError)
             }
             is ConnectException, is MalformedJsonException, is JsonSyntaxException, is InterruptedIOException -> {
-                errorHandler?.onError(HttpRequestError.ServerError)
+                errorHandler?.onError(HttpRequestError.ServerError())
             }
             else -> {
-                errorHandler?.onError(HttpRequestError.ServerError)
+                errorHandler?.onError(HttpRequestError.ServerError())
             }
         }
     }

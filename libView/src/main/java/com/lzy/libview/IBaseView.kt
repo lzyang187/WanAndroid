@@ -1,5 +1,7 @@
 package com.lzy.libview
 
+import android.content.Context
+import android.content.DialogInterface
 import androidx.annotation.StringRes
 
 /**
@@ -24,5 +26,17 @@ interface IBaseView {
      * @param resId 资源id
      */
     fun toast(@StringRes resId: Int)
+
+    fun showWaitingDialog(context: Context) {
+
+    }
+
+    fun showWaitingDialog(context: Context, cancelListener: DialogInterface.OnCancelListener) {
+
+    }
+
+    fun dismissWaitingDialog() {
+
+    }
 
 }

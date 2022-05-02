@@ -1,11 +1,7 @@
 package com.lzy.corebiz.httpservice
 
-import com.lzy.corebiz.httpservice.bean.ArticleBean
-import com.lzy.corebiz.httpservice.bean.ArticleData
-import com.lzy.corebiz.httpservice.bean.BannerBean
-import com.lzy.corebiz.httpservice.bean.BaseResult
-import retrofit2.http.GET
-import retrofit2.http.Path
+import com.lzy.corebiz.httpservice.bean.*
+import retrofit2.http.*
 
 /**
  * Created by zhaoyang.li5 on 2022/4/12 8:39
@@ -35,5 +31,17 @@ interface WanAndroidHttpService {
      */
     @GET("banner/json")
     suspend fun banner(): BaseResult<List<BannerBean>>
+
+    /**
+     * https://www.wanandroid.com/user/login
+     * 方法：POST
+     * 参数：username，password
+     * 登录后会在cookie中返回账号密码，只要在客户端做cookie持久化存储即可自动登录验证。
+     */
+    @FormUrlEncoded
+    @POST("user/login")
+    suspend fun login(
+        @Field("username") username: String, @Field("password") password: String
+    ): BaseResult<UserBean>
 
 }

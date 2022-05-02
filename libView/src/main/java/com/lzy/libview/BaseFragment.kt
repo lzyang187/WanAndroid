@@ -1,14 +1,16 @@
 package com.lzy.libview
 
+import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.lzy.libview.dialog.WaitingDialog
 
 /**
  * Created by zhaoyang.li5 on 2022/4/3 15:22
@@ -96,6 +98,37 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), IBaseView {
 
     override fun toast(@StringRes resId: Int) {
         Toast.makeText(context, resId, Toast.LENGTH_SHORT).show()
+    }
+
+    private var mWaitingDialog: WaitingDialog? = null
+
+    override fun showWaitingDialog(context: Context) {
+        if (mWaitingDialog == null) {
+            mWaitingDialog = WaitingDialog(context)
+        }
+        mWaitingDialog?.let {
+            it.setCancelable(false)
+            it.setCanceledOnTouchOutside(false)
+            it.show()
+        }
+    }
+
+    override fun showWaitingDialog(
+        context: Context, cancelListener: DialogInterface.OnCancelListener
+    ) {
+        if (mWaitingDialog == null) {
+            mWaitingDialog = WaitingDialog(context)
+        }
+        mWaitingDialog?.let {
+            it.setCancelable(true)
+            it.setCanceledOnTouchOutside(true)
+            it.setOnCancelListener(cancelListener)
+            it.show()
+        }
+    }
+
+    override fun dismissWaitingDialog() {
+        mWaitingDialog?.dismiss()
     }
 
 }

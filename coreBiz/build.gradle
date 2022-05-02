@@ -21,6 +21,10 @@ android {
 
     resourcePrefix "core_biz_"
 
+    buildFeatures {
+        viewBinding true
+    }
+
 }
 
 dependencies {

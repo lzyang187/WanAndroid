@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="lib_view_theme_color">#FF3700B3</color>
+    <color name="lib_view_theme_color">#2278FF</color>
+    <color name="lib_view_theme_color_disable">#662278FF</color>
 </resources>

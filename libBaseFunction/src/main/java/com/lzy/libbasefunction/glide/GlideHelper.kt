@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.request.RequestOptions
 import com.lzy.libbasefunction.R
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation
@@ -37,6 +38,22 @@ object GlideHelper {
         ).error(
             ContextCompat.getDrawable(
                 iv.context, R.drawable.lib_basefunction_shape_image_place_holder
+            )
+        )
+    }
+
+    fun getCircleRequestOptions(@NonNull iv: ImageView): RequestOptions {
+        return RequestOptions.bitmapTransform(
+            MultiTransformation(
+                CenterCrop(), CircleCrop()
+            )
+        ).placeholder(
+            ContextCompat.getDrawable(
+                iv.context, R.drawable.lib_basefunction_ic_baseline_account_circle_24
+            )
+        ).error(
+            ContextCompat.getDrawable(
+                iv.context, R.drawable.lib_basefunction_ic_baseline_account_circle_24
             )
         )
     }

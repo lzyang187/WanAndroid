@@ -1,2 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.lzy.corebiz"/>
+    package="com.lzy.corebiz">
+
+    <application>
+        <activity
+            android:name=".login.ui.login.LoginActivity"
+            android:exported="true"
+            android:label="@string/core_biz_title_activity_login" />
+    </application>
+
+</manifest>

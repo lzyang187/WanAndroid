@@ -3,6 +3,7 @@ package com.lzy.wanandroid
 import android.app.Application
 import com.blankj.utilcode.util.LogUtils
 import com.lzy.corebiz.AppConfig
+import com.lzy.corebiz.login.UserMgr
 import com.lzy.libhttp.RetrofitBuildHelper
 import com.lzy.libview.LibViewInit
 import dagger.hilt.android.HiltAndroidApp
@@ -24,6 +25,7 @@ class MyApplication : Application() {
         )
         LogUtils.getConfig().setLogSwitch(BuildConfig.DEBUG)
             .setBorderSwitch(false).isLogHeadSwitch = false
+        UserMgr.init()
         RetrofitBuildHelper.init("https://www.wanandroid.com")
         LibViewInit.initRefresh(this)
     }

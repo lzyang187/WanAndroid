@@ -33,7 +33,7 @@
                 android:paddingRight="3dp"
                 android:text="新"
                 android:textColor="?attr/colorSecondary"
-                android:textSize="12sp" />
+                android:textSize="11sp" />
 
         </LinearLayout>
 
@@ -122,7 +122,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ll_middle"
         android:layout_centerVertical="true"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="11dp"
         android:gravity="center_vertical">
 
         <TextView
@@ -136,7 +136,7 @@
             android:paddingRight="3dp"
             android:text="置顶"
             android:textColor="?attr/colorSecondary"
-            android:textSize="12sp" />
+            android:textSize="11sp" />
 
     </LinearLayout>
 

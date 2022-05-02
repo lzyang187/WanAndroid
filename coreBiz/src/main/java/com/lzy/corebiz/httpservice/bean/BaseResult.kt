@@ -10,7 +10,7 @@ data class BaseResult<D>(val errorCode: Int, val errorMsg: String, val data: D?)
     fun success() = errorCode == 0
 
     /**
-     * 登录过期
+     * 登录失效，需要重新登录
      */
-    fun tokenTimeout() = errorCode == -1001
+    fun needLogin() = errorCode == -1001
 }
