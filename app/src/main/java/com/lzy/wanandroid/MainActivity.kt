@@ -1,10 +1,12 @@
 package com.lzy.wanandroid
 
+import android.content.Intent
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
+import com.blankj.utilcode.util.ActivityUtils
 import com.bumptech.glide.Glide
 import com.lzy.corebiz.httpservice.bean.UserBean
 import com.lzy.corebiz.login.UserMgr
@@ -14,6 +16,7 @@ import com.lzy.libview.BaseActivity
 import com.lzy.libview.ViewPager2FragmentStateAdapter
 import com.lzy.wanandroid.databinding.ActivityMainBinding
 import com.lzy.wanandroid.databinding.DrawerHeaderBinding
+import com.lzy.wanandroid.settings.SettingsActivity
 import com.lzy.wanandroid.ui.dashboard.DashboardFragment
 import com.lzy.wanandroid.ui.home.HomeFragment
 import com.lzy.wanandroid.ui.notifications.NotificationsFragment
@@ -68,10 +71,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                     toast(R.string.my_share)
                 }
                 R.id.settings -> {
-
+                    ActivityUtils.startActivity(Intent(this, SettingsActivity::class.java))
                 }
             }
-            mBinding.drawerLayout.closeDrawers()
             return@setNavigationItemSelectedListener true
         }
         initDrawHeaderView()

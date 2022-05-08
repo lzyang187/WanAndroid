@@ -1,0 +1,26 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="@string/official_website"
+        app:summary="@string/official_website_url"
+        app:title="@string/official_website" />
+
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="@string/source_code"
+        app:summary="@string/source_code_url"
+        app:title="@string/source_code" />
+
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="@string/copyright"
+        app:summary="@string/copyright_summary"
+        app:title="@string/copyright" />
+
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="@string/about_us"
+        app:title="@string/about_us" />
+
+</PreferenceScreen>

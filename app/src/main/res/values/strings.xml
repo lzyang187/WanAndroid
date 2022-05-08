@@ -6,7 +6,15 @@
     <string name="my_collect">我的收藏</string>
     <string name="my_share">我的分享</string>
     <string name="settings">系统设置</string>
-    <string name="about">关于我们</string>
-    <string name="copyright">版权声明</string>
+    <string name="about_us">关于我们</string>
     <string name="logout">退出登录</string>
+    <string name="official_website">官方网站</string>
+    <string name="official_website_url">https://wanandroid.com</string>
+    <string name="source_code">源代码</string>
+    <string name="source_code_url">https://github.com/lzyang187/WanAndroid</string>
+    <string name="copyright">版权声明</string>
+    <string name="copyright_summary">仅作个人及非商业用途</string>
+    <string name="copyright_detail">此App所使用的接口服务器为玩Android网站提供，仅供学习交流，禁止用于任何商业用途。</string>
+    <string name="sure">确定</string>
+
 </resources>
