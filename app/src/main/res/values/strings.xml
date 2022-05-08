@@ -16,5 +16,6 @@
     <string name="copyright_summary">仅作个人及非商业用途</string>
     <string name="copyright_detail">此App所使用的接口服务器为玩Android网站提供，仅供学习交流，禁止用于任何商业用途。</string>
     <string name="sure">确定</string>
+    <string name="version_name">Version %1$s</string>
 
 </resources>

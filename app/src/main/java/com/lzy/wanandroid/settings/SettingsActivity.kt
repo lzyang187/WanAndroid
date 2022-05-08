@@ -1,5 +1,6 @@
 package com.lzy.wanandroid.settings
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
@@ -49,7 +50,7 @@ class SettingsActivity : BaseActivity<SettingsActivityBinding>() {
                     }
 
                     getString(R.string.about_us) -> {
-
+                        startActivity(Intent(it, AboutUsActivity::class.java))
                     }
                 }
             }
