@@ -23,4 +23,9 @@
         app:key="@string/about_us"
         app:title="@string/about_us" />
 
+    <Preference
+        app:iconSpaceReserved="false"
+        app:key="@string/core_biz_logout"
+        app:title="@string/core_biz_logout" />
+
 </PreferenceScreen>

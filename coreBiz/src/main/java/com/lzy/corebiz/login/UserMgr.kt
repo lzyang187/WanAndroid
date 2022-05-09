@@ -21,6 +21,8 @@ object UserMgr {
         }
     }
 
+    fun isLogin() = mUserBeanLiveData.value != null
+
     fun updateUserBean(userBean: UserBean) {
         mUserBeanLiveData.value = userBean
         CacheDiskStaticUtils.put(KEY_USER_BEAN, userBean)

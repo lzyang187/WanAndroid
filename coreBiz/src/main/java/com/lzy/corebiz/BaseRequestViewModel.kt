@@ -22,7 +22,7 @@ open class BaseRequestViewModel : BaseViewModel() {
 
     fun getHttpRequestErrorLiveData() = mHttpRequestErrorLiveData
 
-    private val mNeedLoginLiveData = MutableLiveData<Boolean>()
+    protected val mNeedLoginLiveData = MutableLiveData<Boolean>()
     val getNeedLoginLiveData = mNeedLoginLiveData
 
     protected fun launchLiveDataHandlerRequest(block: suspend CoroutineScope.() -> Unit): Job {

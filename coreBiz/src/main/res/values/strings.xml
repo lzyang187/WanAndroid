@@ -11,7 +11,10 @@
     <string name="core_biz_action_go_register">去注册</string>
     <string name="core_biz_title_register_tip">注册WanAndroid账号！</string>
     <string name="core_biz_prompt_password_again">再输入一次密码</string>
-    <string name="core_biz_welcome">"欢迎"</string>
-    <string name="core_biz_login_failed">"登录失败"</string>
-    <string name="core_biz_register_failed">"注册失败"</string>
+    <string name="core_biz_welcome">欢迎</string>
+    <string name="core_biz_login_failed">登录失败</string>
+    <string name="core_biz_register_failed">注册失败</string>
+    <string name="core_biz_logout">退出登录</string>
+    <string name="core_biz_logout_confirm">确定退出登录吗？</string>
+    <string name="core_biz_logout_success">退出登录成功</string>
 </resources>
