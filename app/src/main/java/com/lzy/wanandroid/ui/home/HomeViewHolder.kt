@@ -11,7 +11,7 @@ import com.lzy.wanandroid.databinding.ItemHomeArticleLayoutBinding
 /**
  * Created by zhaoyang.li5 on 2022/4/13 9:22
  */
-class HomeViewHolder(binding: ItemHomeArticleLayoutBinding) :
+class HomeViewHolder(binding: ItemHomeArticleLayoutBinding, private val mViewModel: HomeViewModel) :
     BaseViewHolder<ArticleBean, ItemHomeArticleLayoutBinding>(binding) {
     override fun bind(position: Int, data: ArticleBean?) {
         data?.apply {
@@ -43,7 +43,10 @@ class HomeViewHolder(binding: ItemHomeArticleLayoutBinding) :
                 mBinding.tvChapterName.visibility = View.VISIBLE
                 mBinding.tvChapterName.text = chapter
             }
-
+            mBinding.cvCollect.isSelected = collect == true
+            mBinding.cvCollect.setOnClickListener {
+                mViewModel.collectOrNot(position, this)
+            }
         }
     }
 }

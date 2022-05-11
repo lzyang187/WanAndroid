@@ -27,4 +27,14 @@ class HomeRepository @Inject constructor() {
         val httpService = RetrofitBuildHelper.create(WanAndroidHttpService::class.java)
         return httpService.banner()
     }
+
+    suspend fun collectArticle(id: Int): BaseResult<Unit> {
+        val httpService = RetrofitBuildHelper.create(WanAndroidHttpService::class.java)
+        return httpService.collectArticle(id)
+    }
+
+    suspend fun unCollectArticle(id: Int): BaseResult<Unit> {
+        val httpService = RetrofitBuildHelper.create(WanAndroidHttpService::class.java)
+        return httpService.unCollectArticle(id)
+    }
 }

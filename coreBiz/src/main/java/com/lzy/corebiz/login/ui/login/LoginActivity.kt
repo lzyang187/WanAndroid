@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.blankj.utilcode.util.ActivityUtils
@@ -114,7 +115,7 @@ class LoginActivity : BaseActivity<CoreBizActivityLoginBinding>() {
     }
 
     companion object {
-        fun startLoginActivity(activity: BaseActivity<*>) {
+        fun startLoginActivity(activity: FragmentActivity) {
             val intent = Intent(activity, LoginActivity::class.java)
             // TODO: 2022/5/2
             activity.startActivityForResult(intent, 1)

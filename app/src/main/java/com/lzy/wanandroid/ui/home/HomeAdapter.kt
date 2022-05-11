@@ -18,7 +18,8 @@ import com.lzy.wanandroid.databinding.ItemHomeArticleLayoutBinding
 class HomeAdapter(
     private val mContext: Context,
     private var mArticleList: List<ArticleBean>,
-    private val mListener: BaseAdapter.OnItemClickListener<ArticleBean>
+    private val mListener: BaseAdapter.OnItemClickListener<ArticleBean>,
+    private val mViewModel: HomeViewModel
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>(
 
 ) {
@@ -32,7 +33,8 @@ class HomeAdapter(
     private var mBannerItemClickListener: BaseAdapter.OnItemClickListener<IBannerData>? = null
 
     fun setBannerList(
-        bannerList: List<BannerBean>, itemClickListener: BaseAdapter.OnItemClickListener<IBannerData>
+        bannerList: List<BannerBean>,
+        itemClickListener: BaseAdapter.OnItemClickListener<IBannerData>
     ) {
         mBannerItemClickListener = itemClickListener
         mBannerList = bannerList
@@ -60,7 +62,7 @@ class HomeAdapter(
             HomeViewHolder(
                 ItemHomeArticleLayoutBinding.inflate(
                     mLayoutInflater, parent, false
-                )
+                ), mViewModel
             )
         }
     }
@@ -70,9 +72,13 @@ class HomeAdapter(
         if (itemViewType == VIEW_TYPE_HEADER) {
             // ignore
         } else {
-            (holder as HomeViewHolder).bind(position - 1, mArticleList[position - 1])
+            (holder as HomeViewHolder).bind(
+                position, mArticleList[position - HEADER_COUNT]
+            )
             holder.itemView.setOnClickListener {
-                mListener.onItemClick(position - 1, mArticleList[position - 1])
+                mListener.onItemClick(
+                    position, mArticleList[position - HEADER_COUNT]
+                )
             }
         }
     }

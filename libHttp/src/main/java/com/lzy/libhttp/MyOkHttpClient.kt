@@ -25,6 +25,7 @@ object MyOkHttpClient {
         newBuilder.connectTimeout(30, TimeUnit.SECONDS).readTimeout(30, TimeUnit.SECONDS)
             .writeTimeout(30, TimeUnit.SECONDS).retryOnConnectionFailure(true)
             .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
+            .cookieJar(CookieUtil.getPersistentCookieJar())
         mCacheFile?.let {
             val cache = Cache(it, 10 * 1024 * 1024L)
             newBuilder.cache(cache)

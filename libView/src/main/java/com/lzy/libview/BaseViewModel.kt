@@ -8,5 +8,5 @@ import androidx.lifecycle.ViewModel
  */
 open class BaseViewModel : ViewModel() {
     protected val mToastLiveData = MutableLiveData<String>()
-    fun getToastLiveData() = mToastLiveData
+    val getToastLiveData = mToastLiveData
 }

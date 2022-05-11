@@ -61,4 +61,27 @@ interface WanAndroidHttpService {
         @Field("repassword") repassword: String
     ): BaseResult<UserBean>
 
+    /**
+     * https://www.wanandroid.com/lg/collect/1165/json
+     * 方法：POST
+     * 参数： 文章id，拼接在链接中。
+     */
+    @POST("lg/collect/{id}/json")
+    suspend fun collectArticle(@Path("id") id: Int): BaseResult<Unit>
+
+    /**
+     * https://www.wanandroid.com/lg/collect/list/0/json
+     * 方法：GET
+     * 参数： 页码：拼接在链接中，从0开始。
+     */
+    @GET("lg/collect/list/{page}/json")
+    suspend fun collectList(@Path("page") page: Int): BaseResult<ArticleData>
+
+    /**
+     * https://www.wanandroid.com/lg/uncollect_originId/2333/json
+     * 方法：POST
+     * 参数：id:拼接在链接上
+     */
+    @POST("lg/uncollect_originId/{id}/json")
+    suspend fun unCollectArticle(@Path("id") id: Int): BaseResult<Unit>
 }

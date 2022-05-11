@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.StringRes
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lzy.corebiz.httpservice.bean.ArticleBean
 import com.lzy.corebiz.httpservice.bean.BannerBean
+import com.lzy.corebiz.login.ui.login.LoginActivity
 import com.lzy.libhttp.exception.HttpRequestError
 import com.lzy.libview.BaseAdapter
 import com.lzy.libview.BaseFragment
@@ -102,7 +104,7 @@ class HomeFragment @Inject constructor() : BaseFragment<FragmentHomeBinding>(),
                 if (::mAdapter.isInitialized) {
                     mAdapter.notifyDataSetChanged()
                 } else {
-                    mAdapter = HomeAdapter(con, it, this)
+                    mAdapter = HomeAdapter(con, it, this, mViewModel)
                     if (mViewModel.getBannerLiveData().value?.isNotEmpty() == true) {
                         mAdapter.setBannerList(
                             mViewModel.getBannerLiveData().value as List<BannerBean>,
@@ -118,6 +120,19 @@ class HomeFragment @Inject constructor() : BaseFragment<FragmentHomeBinding>(),
                 if (::mAdapter.isInitialized) {
                     mAdapter.setBannerList(it, mBannerItemClickListener)
                 }
+            }
+        })
+        mViewModel.getNotifyPosition.observe(this, Observer {
+            if (::mAdapter.isInitialized) {
+                mAdapter.notifyItemChanged(it)
+            }
+        })
+        mViewModel.getToastLiveData.observe(this, Observer {
+            toast(it)
+        })
+        mViewModel.getNeedLoginLiveData.observe(this, Observer {
+            activity?.let {
+                LoginActivity.startLoginActivity(it)
             }
         })
     }
