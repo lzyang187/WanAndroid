@@ -10,6 +10,7 @@ import com.lzy.libview.BaseAdapter
 import com.lzy.libview.banner.BannerView
 import com.lzy.libview.banner.IBannerData
 import com.lzy.wanandroid.R
+import com.lzy.wanandroid.collect.BaseCollectViewModel
 import com.lzy.wanandroid.databinding.ItemHomeArticleLayoutBinding
 
 /**
@@ -19,10 +20,8 @@ class HomeAdapter(
     private val mContext: Context,
     private var mArticleList: List<ArticleBean>,
     private val mListener: BaseAdapter.OnItemClickListener<ArticleBean>,
-    private val mViewModel: HomeViewModel
-) : RecyclerView.Adapter<RecyclerView.ViewHolder>(
-
-) {
+    private val mViewModel: BaseCollectViewModel
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val mLayoutInflater: LayoutInflater by lazy {
         LayoutInflater.from(mContext)
@@ -31,6 +30,15 @@ class HomeAdapter(
     private lateinit var mHeaderView: BannerView
     private var mBannerList: List<BannerBean>? = null
     private var mBannerItemClickListener: BaseAdapter.OnItemClickListener<IBannerData>? = null
+    private var mSupportHeader = true
+    private var mHeaderCount = 1
+
+    fun setSupportHeader(support: Boolean) {
+        mSupportHeader = support
+        if (!mSupportHeader) {
+            mHeaderCount = 0
+        }
+    }
 
     fun setBannerList(
         bannerList: List<BannerBean>,
@@ -73,27 +81,26 @@ class HomeAdapter(
             // ignore
         } else {
             (holder as HomeViewHolder).bind(
-                position, mArticleList[position - HEADER_COUNT]
+                position, mArticleList[position - mHeaderCount]
             )
             holder.itemView.setOnClickListener {
                 mListener.onItemClick(
-                    position, mArticleList[position - HEADER_COUNT]
+                    position, mArticleList[position - mHeaderCount]
                 )
             }
         }
     }
 
-    override fun getItemCount() = mArticleList.size + HEADER_COUNT
+    override fun getItemCount() = mArticleList.size + mHeaderCount
 
     override fun getItemViewType(position: Int): Int {
-        if (position == 0) {
+        if (mSupportHeader && position == 0) {
             return VIEW_TYPE_HEADER
         }
         return VIEW_TYPE_ARTICLE
     }
 
     companion object {
-        const val HEADER_COUNT = 1
         const val VIEW_TYPE_HEADER = 1
         const val VIEW_TYPE_ARTICLE = 2
     }

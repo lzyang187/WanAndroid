@@ -14,6 +14,7 @@ import com.lzy.corebiz.login.ui.login.LoginActivity
 import com.lzy.libbasefunction.glide.GlideHelper
 import com.lzy.libview.BaseActivity
 import com.lzy.libview.ViewPager2FragmentStateAdapter
+import com.lzy.wanandroid.collect.CollectArticlesActivity
 import com.lzy.wanandroid.databinding.ActivityMainBinding
 import com.lzy.wanandroid.databinding.DrawerHeaderBinding
 import com.lzy.wanandroid.settings.SettingsActivity
@@ -65,7 +66,15 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         mBinding.navigationView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.my_collect -> {
-                    toast(R.string.my_collect)
+                    if (UserMgr.isLogin()) {
+                        ActivityUtils.startActivity(
+                            Intent(
+                                this, CollectArticlesActivity::class.java
+                            )
+                        )
+                    } else {
+                        LoginActivity.startLoginActivity(this)
+                    }
                 }
                 R.id.my_share -> {
                     toast(R.string.my_share)

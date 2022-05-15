@@ -1,60 +1,43 @@
-package com.lzy.wanandroid.ui.home
+package com.lzy.wanandroid.collect
 
-import android.content.Context
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
+import androidx.activity.viewModels
 import androidx.annotation.StringRes
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.lzy.corebiz.httpservice.bean.ArticleBean
-import com.lzy.corebiz.httpservice.bean.BannerBean
 import com.lzy.corebiz.login.ui.login.LoginActivity
 import com.lzy.libhttp.exception.HttpRequestError
+import com.lzy.libview.BaseActivity
 import com.lzy.libview.BaseAdapter
-import com.lzy.libview.BaseFragment
-import com.lzy.libview.banner.IBannerData
 import com.lzy.libview.webview.WebViewActivity
 import com.lzy.wanandroid.R
-import com.lzy.wanandroid.databinding.FragmentHomeBinding
+import com.lzy.wanandroid.databinding.ActivityCollectArticlesBinding
+import com.lzy.wanandroid.ui.home.HomeAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeFragment @Inject constructor() : BaseFragment<FragmentHomeBinding>(),
+class CollectArticlesActivity : BaseActivity<ActivityCollectArticlesBinding>(),
     BaseAdapter.OnItemClickListener<ArticleBean> {
 
-    private val mViewModel: HomeViewModel by viewModels()
+    private val mViewModel: CollectArticlesViewModel by viewModels()
     private lateinit var mAdapter: HomeAdapter
 
-    override fun initViewBinding(
-        inflater: LayoutInflater, container: ViewGroup?
-    ): FragmentHomeBinding {
-        return FragmentHomeBinding.inflate(inflater, container, false)
+    override fun initViewBinding(): ActivityCollectArticlesBinding {
+        return ActivityCollectArticlesBinding.inflate(layoutInflater)
     }
 
     override fun initView() {
+        super.initView()
+        initToolbar(mBinding.toolbarLayout.toolbar)
         mBinding.pullLayout.setOnRefreshListener { onRefreshData() }
         mBinding.pullLayout.setOnLoadMoreListener { onLoadMore() }
-        mBinding.recyclerView.layoutManager = LinearLayoutManager(context)
+        mBinding.recyclerView.layoutManager = LinearLayoutManager(this)
         mBinding.recyclerView.addItemDecoration(
             DividerItemDecoration(
-                context, DividerItemDecoration.VERTICAL
+                this, DividerItemDecoration.VERTICAL
             )
         )
-    }
-
-    private fun onRefreshData() {
-        mViewModel.refresh()
-    }
-
-    private fun onLoadMore() {
-        mViewModel.loadMore()
-    }
-
-    override fun initViewModel() {
         mViewModel.getHttpRequestErrorLiveData().observe(this, { error ->
             when (error) {
                 is HttpRequestError.NetworkError -> {
@@ -88,61 +71,52 @@ class HomeFragment @Inject constructor() : BaseFragment<FragmentHomeBinding>(),
             }
         })
         mViewModel.getArticleListLiveData().observe(this, {
-            context?.let { con: Context ->
-                when {
-                    mViewModel.isRefresh() -> {
-                        hideEmptyView()
-                        mBinding.pullLayout.finishRefresh()
-                    }
-                    else -> {
-                        mBinding.pullLayout.finishLoadMore()
-                    }
+            when {
+                mViewModel.isRefresh() -> {
+                    hideEmptyView()
+                    mBinding.pullLayout.finishRefresh()
+
                 }
-                if (mViewModel.isNoMore()) {
-                    mBinding.pullLayout.finishLoadMoreWithNoMoreData()
-                }
-                if (::mAdapter.isInitialized) {
-                    mAdapter.notifyDataSetChanged()
-                } else {
-                    mAdapter = HomeAdapter(con, it, this, mViewModel)
-                    if (mViewModel.getBannerLiveData().value?.isNotEmpty() == true) {
-                        mAdapter.setBannerList(
-                            mViewModel.getBannerLiveData().value as List<BannerBean>,
-                            mBannerItemClickListener
-                        )
-                    }
-                    mBinding.recyclerView.adapter = mAdapter
+                else -> {
+                    mBinding.pullLayout.finishLoadMore()
                 }
             }
-        })
-        mViewModel.getBannerLiveData().observe(this, {
-            context?.let { con: Context ->
-                if (::mAdapter.isInitialized) {
-                    mAdapter.setBannerList(it, mBannerItemClickListener)
-                }
+            if (mViewModel.isNoMore()) {
+                mBinding.pullLayout.finishLoadMoreWithNoMoreData()
+            }
+            if (::mAdapter.isInitialized) {
+                mAdapter.notifyDataSetChanged()
+            } else {
+                mAdapter = HomeAdapter(this, it, this, mViewModel)
+                mAdapter.setSupportHeader(false)
+                mBinding.recyclerView.adapter = mAdapter
             }
         })
-        mViewModel.getNotifyPosition.observe(this, Observer {
+        mViewModel.getNotifyPosition.observe(this, {
             if (::mAdapter.isInitialized) {
                 mAdapter.notifyItemChanged(it)
             }
         })
-        mViewModel.getToastLiveData.observe(this, Observer {
+        mViewModel.getToastLiveData.observe(this, {
             toast(it)
         })
-        mViewModel.getNeedLoginLiveData.observe(this, Observer {
-            activity?.let {
-                LoginActivity.startLoginActivity(it)
-            }
+        mViewModel.getNeedLoginLiveData.observe(this, {
+            LoginActivity.startLoginActivity(this)
         })
     }
 
-    private val mBannerItemClickListener = object : BaseAdapter.OnItemClickListener<IBannerData> {
-        override fun onItemClick(position: Int, data: IBannerData?) {
-            (data as BannerBean?)?.url?.let {
-                activity?.let { activity -> WebViewActivity.openWebViewActivity(activity, it) }
-            }
-        }
+    override fun requestOrLoadData() {
+        hideEmptyView()
+        mBinding.pullLayout.autoRefreshAnimationOnly()
+        mViewModel.refresh()
+    }
+
+    private fun onRefreshData() {
+        mViewModel.refresh()
+    }
+
+    private fun onLoadMore() {
+        mViewModel.loadMore()
     }
 
     private fun showEmptyView(tip: String) {
@@ -167,17 +141,9 @@ class HomeFragment @Inject constructor() : BaseFragment<FragmentHomeBinding>(),
         mBinding.pullLayout.finishLoadMore(false)
     }
 
-    override fun requestOrLoadData() {
-        hideEmptyView()
-        mBinding.pullLayout.autoRefreshAnimationOnly()
-        mViewModel.refresh()
-    }
-
     override fun onItemClick(position: Int, data: ArticleBean?) {
         data?.link?.let { link: String ->
-            activity?.let { activity -> WebViewActivity.openWebViewActivity(activity, link) }
+            WebViewActivity.openWebViewActivity(this, link)
         }
     }
-
-
 }

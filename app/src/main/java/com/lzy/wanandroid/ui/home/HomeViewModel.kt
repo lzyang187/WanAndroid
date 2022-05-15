@@ -2,18 +2,17 @@ package com.lzy.wanandroid.ui.home
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.lzy.corebiz.BaseRequestViewModel
 import com.lzy.corebiz.httpservice.bean.ArticleBean
 import com.lzy.corebiz.httpservice.bean.BannerBean
-import com.lzy.corebiz.login.UserMgr
 import com.lzy.libhttp.exception.HttpRequestError
+import com.lzy.wanandroid.collect.BaseCollectViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-class HomeViewModel @Inject constructor() : BaseRequestViewModel() {
+class HomeViewModel @Inject constructor() : BaseCollectViewModel() {
 
     @Inject
     lateinit var mHomeRepository: HomeRepository
@@ -101,58 +100,6 @@ class HomeViewModel @Inject constructor() : BaseRequestViewModel() {
                 result.data?.let {
                     mBannerList.addAll(it)
                     mBannerLiveData.value = mBannerList
-                }
-            }
-        }
-    }
-
-    private val mNotifyPosition = MutableLiveData<Int>()
-    val getNotifyPosition = mNotifyPosition
-
-    fun collectOrNot(position: Int, data: ArticleBean) {
-        data.id?.let { id: Int ->
-            if (data.collect == true) {
-                // 取消收藏
-                launchToastHandlerRequest {
-                    val result = mHomeRepository.unCollectArticle(id)
-                    when {
-                        result.success() -> {
-                            data.collect = false
-                            // 更新页面
-                            mNotifyPosition.value = position
-                        }
-                        result.needLogin() -> {
-                            // 清除本地用户信息
-                            UserMgr.logOut()
-                            mNeedLoginLiveData.value = true
-                            mToastLiveData.value = result.errorMsg
-                        }
-                        else -> {
-                            mToastLiveData.value = result.errorMsg
-                        }
-                    }
-                }
-            } else {
-                // 收藏
-                data.collect = true
-                launchToastHandlerRequest {
-                    val result = mHomeRepository.collectArticle(id)
-                    when {
-                        result.success() -> {
-                            data.collect = true
-                            // 更新页面
-                            mNotifyPosition.value = position
-                        }
-                        result.needLogin() -> {
-                            // 清除本地用户信息
-                            UserMgr.logOut()
-                            mNeedLoginLiveData.value = true
-                            mToastLiveData.value = result.errorMsg
-                        }
-                        else -> {
-                            mToastLiveData.value = result.errorMsg
-                        }
-                    }
                 }
             }
         }

@@ -21,6 +21,7 @@ data class ArticleBean(
     val fresh: Boolean?,
     val host: String?,
     val id: Int?,
+    val originId: Int?,
     val link: String?,
     val niceDate: String?,
     val niceShareDate: String?,

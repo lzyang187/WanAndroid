@@ -6,13 +6,15 @@ import com.bumptech.glide.Glide
 import com.lzy.corebiz.httpservice.bean.ArticleBean
 import com.lzy.libbasefunction.glide.GlideHelper
 import com.lzy.libview.BaseViewHolder
+import com.lzy.wanandroid.collect.BaseCollectViewModel
 import com.lzy.wanandroid.databinding.ItemHomeArticleLayoutBinding
 
 /**
  * Created by zhaoyang.li5 on 2022/4/13 9:22
  */
-class HomeViewHolder(binding: ItemHomeArticleLayoutBinding, private val mViewModel: HomeViewModel) :
-    BaseViewHolder<ArticleBean, ItemHomeArticleLayoutBinding>(binding) {
+class HomeViewHolder(
+    binding: ItemHomeArticleLayoutBinding, private val mViewModel: BaseCollectViewModel
+) : BaseViewHolder<ArticleBean, ItemHomeArticleLayoutBinding>(binding) {
     override fun bind(position: Int, data: ArticleBean?) {
         data?.apply {
             mBinding.tvTop.visibility = if (top) View.VISIBLE else View.GONE
