@@ -29,15 +29,17 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api 'androidx.appcompat:appcompat:1.4.1'
-    api 'com.google.android.material:material:1.5.0'
-    api 'androidx.constraintlayout:constraintlayout:2.1.3'
-    implementation project(':libUtils')
+    api "androidx.appcompat:appcompat:$project.ext.appCompatVersion"
+    api "com.google.android.material:material:$project.ext.materialVersion"
+    api "androidx.constraintlayout:constraintlayout:$project.ext.constraintLayoutVersion"
+    implementation "androidx.webkit:webkit:$project.ext.webkitVersion"
+
     // 刷新组件：核心必须依赖
-    api 'io.github.scwang90:refresh-layout-kernel:2.0.5'
+    api "io.github.scwang90:refresh-layout-kernel:$project.ext.smartRefreshVersion"
     // 谷歌刷新头
-    api 'io.github.scwang90:refresh-header-material:2.0.5'
+    api "io.github.scwang90:refresh-header-material:$project.ext.smartRefreshVersion"
     // 经典加载更多
-    api 'io.github.scwang90:refresh-footer-classics:2.0.5'
-    implementation 'androidx.webkit:webkit:1.4.0'
+    api "io.github.scwang90:refresh-footer-classics:$project.ext.smartRefreshVersion"
+
+    implementation project(':libUtils')
 }

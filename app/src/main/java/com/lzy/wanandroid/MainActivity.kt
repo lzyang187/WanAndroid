@@ -1,6 +1,7 @@
 package com.lzy.wanandroid
 
 import android.content.Intent
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.core.view.GravityCompat
@@ -128,10 +129,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
                 mBinding.drawerLayout.openDrawer(GravityCompat.START)
+            }
+            R.id.search -> {
+                toast(R.string.search)
             }
         }
         return true

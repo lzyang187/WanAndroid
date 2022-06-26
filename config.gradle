@@ -8,7 +8,20 @@ project.ext {
     versionName = "1.0.01"
 
     // Android官方依赖库
+    appCompatVersion = '1.4.2'
+    constraintLayoutVersion = '2.1.4'
+    materialVersion = '1.6.1'
+    navigationVersion = '2.4.2'
+    hiltVersion = '2.38.1'
+    coreKtxVersion = '1.8.0'
+    webkitVersion = '1.4.0'
+    lifecycleVersion = '2.4.1'
+    coroutinesVersion = "1.6.1"
+    gsonVersion = '2.9.0'
 
     // 第三方依赖库
-
+    glideVersion = '4.12.0'
+    retrofitVersion = '2.9.0'
+    smartRefreshVersion = '2.0.5'
+    utilcodexVersion = '1.31.0'
 }

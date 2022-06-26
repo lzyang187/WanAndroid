@@ -25,11 +25,11 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    api 'androidx.core:core-ktx:1.7.0'
-    api 'com.google.code.gson:gson:2.9.0'
-    api 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
-    api 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.0-native-mt"
-    api 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0-native-mt'
-    api 'com.blankj:utilcodex:1.31.0'
+    api "androidx.core:core-ktx:$project.ext.coreKtxVersion"
+    api "androidx.lifecycle:lifecycle-viewmodel-ktx:$project.ext.lifecycleVersion"
+    api "androidx.lifecycle:lifecycle-livedata-ktx:$project.ext.lifecycleVersion"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$project.ext.coroutinesVersion"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$project.ext.coroutinesVersion"
+    api "com.blankj:utilcodex:$project.ext.utilcodexVersion"
+    api "com.google.code.gson:gson:$project.ext.gsonVersion"
 }
